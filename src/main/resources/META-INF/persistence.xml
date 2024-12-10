@@ -1,9 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
-             version="3.2">
-    <persistence-unit name="default">
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+             version="3.1">
+    <persistence-unit name="BibliotecaPU" transaction-type="RESOURCE_LOCAL">
+        <!-- Clases gestionadas por JPA -->
+        <class>Modelo.dto.Usuario</class>
+        <class>Modelo.dto.Libro</class>
+        <class>Modelo.dto.Ejemplar</class>
+        <class>Modelo.dto.Prestamo</class>
 
+        <!-- Configuración de la base de datos -->
+        <properties>
+            <!-- URL de conexión a MariaDB -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/biblioteca" />
+            <!-- Usuario de la base de datos -->
+            <property name="jakarta.persistence.jdbc.user" value="root" />
+            <!-- Contraseña de la base de datos -->
+            <property name="jakarta.persistence.jdbc.password" value="" />
+            <!-- Driver de MariaDB -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
+            <!-- Dialecto de Hibernate para MariaDB -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect" />
+            <!-- Mostrar las consultas SQL en la consola -->
+            <property name="hibernate.show_sql" value="true" />
+            <!-- Crear o actualizar las tablas automáticamente -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+        </properties>
     </persistence-unit>
 </persistence>

@@ -1,11 +1,11 @@
 package Controlador;
 
-import modelo.dao.EjemplarDAO;
-import modelo.dao.LibroDAO;
-import modelo.dto.Ejemplar;
-import modelo.dto.Libro;
-import modelo.validacion.EjemplarValidacion;
-import vista.paneles.PanelEjemplar;
+import Modelo.dao.EjemplarDAO;
+import Modelo.dao.LibroDAO;
+import Modelo.dto.Ejemplar;
+import Modelo.dto.Libro;
+import Modelo.validacion.EjemplarValidacion;
+import Vista.paneles.PanelEjemplar;
 
 import javax.swing.*;
 import java.util.List;
