@@ -1,4 +1,4 @@
-package dto;
+package Modelo.dto;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -16,7 +16,7 @@ public class Ejemplar {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "isbn", nullable = false)
-    private dto.Libro isbn;
+    private Libro isbn;
 
     @ColumnDefault("'Disponible'")
     @Lob
@@ -31,11 +31,11 @@ public class Ejemplar {
         this.id = id;
     }
 
-    public dto.Libro getIsbn() {
+    public Libro getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(dto.Libro isbn) {
+    public void setIsbn(Libro isbn) {
         this.isbn = isbn;
     }
 

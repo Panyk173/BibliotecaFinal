@@ -1,4 +1,4 @@
-package dto;
+package Modelo.dto;
 
 import jakarta.persistence.*;
 

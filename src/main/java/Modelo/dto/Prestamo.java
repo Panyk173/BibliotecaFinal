@@ -1,4 +1,4 @@
-package dto;
+package Modelo.dto;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
@@ -17,7 +17,7 @@ public class Prestamo {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
-    private dto.Usuario usuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -38,11 +38,11 @@ public class Prestamo {
         this.id = id;
     }
 
-    public dto.Usuario getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(dto.Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
