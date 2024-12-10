@@ -86,4 +86,16 @@ public class Usuario {
         this.penalizacionHasta = penalizacionHasta;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", dni='" + dni + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", penalizacionHasta=" + penalizacionHasta +
+                '}';
+    }
 }
