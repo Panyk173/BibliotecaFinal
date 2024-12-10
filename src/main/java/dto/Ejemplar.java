@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+//Creada automaticamente por el IDE
 @Entity
 @Table(name = "ejemplar")
 public class Ejemplar {

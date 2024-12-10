@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+//Creada automaticamente por el IDE
 @Entity
 @Table(name = "libro")
 public class Libro {

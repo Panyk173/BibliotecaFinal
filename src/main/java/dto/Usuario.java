@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+//Creada automaticamente por el IDE
 @Entity
 @Table(name = "usuario")
 public class Usuario {

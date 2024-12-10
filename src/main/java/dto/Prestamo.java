@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
+//Creada automaticamente por el IDE
 @Entity
 @Table(name = "prestamo")
 public class Prestamo {
