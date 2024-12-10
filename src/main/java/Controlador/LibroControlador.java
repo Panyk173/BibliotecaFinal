@@ -1,9 +1,9 @@
 package Controlador;
 
-import modelo.dao.LibroDAO;
-import modelo.dto.Libro;
-import modelo.validacion.LibroValidacion;
-import vista.paneles.PanelLibro;
+import Modelo.dao.LibroDAO;
+import Modelo.dto.Libro;
+import Modelo.validacion.LibroValidacion;
+import Vista.paneles.PanelLibro;
 
 import javax.swing.*;
 import java.util.List;
@@ -32,18 +32,17 @@ public class LibroControlador {
             String titulo = panelLibro.getCampoTitulo().getText();
             String autor = panelLibro.getCampoAutor().getText();
 
-            if (!LibroValidacion.validarISBN(isbn) || !LibroValidacion.validarTitulo(titulo) ||
-                    !LibroValidacion.validarAutor(autor)) {
-                JOptionPane.showMessageDialog(panelLibro, "Datos inválidos.");
-                return;
-            }
-
             Libro libro = new Libro();
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
             libro.setAutor(autor);
 
-            libroDAO.guardarLibro(libro);
+            if (!LibroValidacion.validarLibro(libro)) {
+                JOptionPane.showMessageDialog(panelLibro, "Datos inválidos. Por favor revisa los campos.");
+                return;
+            }
+
+            libroDAO.guardar(libro);
             JOptionPane.showMessageDialog(panelLibro, "Libro agregado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLibro, "Error al agregar libro: " + ex.getMessage());
@@ -52,7 +51,7 @@ public class LibroControlador {
 
     private void listarLibros() {
         try {
-            List<Libro> libros = libroDAO.obtenerTodosLosLibros();
+            List<Libro> libros = libroDAO.obtenerTodos();
             panelLibro.mostrarLibros(libros);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLibro, "Error al listar libros: " + ex.getMessage());
@@ -62,12 +61,10 @@ public class LibroControlador {
     private void eliminarLibro() {
         try {
             String isbn = panelLibro.getCampoISBN().getText();
-            libroDAO.eliminarLibro(isbn);
+            libroDAO.eliminar(isbn);
             JOptionPane.showMessageDialog(panelLibro, "Libro eliminado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLibro, "Error al eliminar libro: " + ex.getMessage());
         }
     }
 }
-
-

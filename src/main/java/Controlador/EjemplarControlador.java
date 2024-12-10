@@ -36,15 +36,9 @@ public class EjemplarControlador {
             String isbn = panelEjemplar.getCampoISBN().getText();
             String estado = panelEjemplar.getCampoEstado().getText();
 
-            Libro libro = libroDAO.buscarLibroPorId(isbn);
+            Libro libro = libroDAO.buscarPorId(isbn);
             if (libro == null) {
                 JOptionPane.showMessageDialog(panelEjemplar, "El libro con ISBN " + isbn + " no existe.");
-                return;
-            }
-
-            if (!EjemplarValidacion.validarId(id) || !EjemplarValidacion.validarLibro(libro) ||
-                !EjemplarValidacion.validarEstado(estado)) {
-                JOptionPane.showMessageDialog(panelEjemplar, "Datos inválidos.");
                 return;
             }
 
@@ -53,7 +47,12 @@ public class EjemplarControlador {
             ejemplar.setIsbn(libro);
             ejemplar.setEstado(estado);
 
-            ejemplarDAO.guardarEjemplar(ejemplar);
+            if (!EjemplarValidacion.validarEjemplar(ejemplar)) {
+                JOptionPane.showMessageDialog(panelEjemplar, "Datos inválidos. Por favor revisa los campos.");
+                return;
+            }
+
+            ejemplarDAO.guardar(ejemplar);
             JOptionPane.showMessageDialog(panelEjemplar, "Ejemplar agregado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al agregar ejemplar: " + ex.getMessage());
@@ -62,7 +61,7 @@ public class EjemplarControlador {
 
     private void listarEjemplares() {
         try {
-            List<Ejemplar> ejemplares = ejemplarDAO.obtenerTodosLosEjemplares();
+            List<Ejemplar> ejemplares = ejemplarDAO.obtenerTodos();
             panelEjemplar.mostrarEjemplares(ejemplares);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al listar ejemplares: " + ex.getMessage());
@@ -72,7 +71,7 @@ public class EjemplarControlador {
     private void eliminarEjemplar() {
         try {
             int id = Integer.parseInt(panelEjemplar.getCampoID().getText());
-            ejemplarDAO.eliminarEjemplar(id);
+            ejemplarDAO.eliminar(id);
             JOptionPane.showMessageDialog(panelEjemplar, "Ejemplar eliminado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al eliminar ejemplar: " + ex.getMessage());

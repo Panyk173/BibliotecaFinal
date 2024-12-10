@@ -1,9 +1,9 @@
 package Controlador;
 
-import modelo.dao.UsuarioDAO;
-import modelo.dto.Usuario;
-import modelo.validacion.UsuarioValidacion;
-import vista.paneles.PanelUsuario;
+import Modelo.dao.UsuarioDAO;
+import Modelo.dto.Usuario;
+import Modelo.validacion.UsuarioValidacion;
+import Vista.paneles.PanelUsuario;
 
 import javax.swing.*;
 import java.util.List;
@@ -34,12 +34,6 @@ public class UsuarioControlador {
             String password = panelUsuario.getCampoPassword().getText();
             String tipo = panelUsuario.getCampoTipo().getText();
 
-            if (!UsuarioValidacion.validarDNI(dni) || !UsuarioValidacion.validarEmail(email) ||
-                    !UsuarioValidacion.validarPassword(password) || !UsuarioValidacion.validarTipo(tipo)) {
-                JOptionPane.showMessageDialog(panelUsuario, "Datos inválidos.");
-                return;
-            }
-
             Usuario usuario = new Usuario();
             usuario.setDni(dni);
             usuario.setNombre(nombre);
@@ -47,7 +41,12 @@ public class UsuarioControlador {
             usuario.setPassword(password);
             usuario.setTipo(tipo);
 
-            usuarioDAO.guardarUsuario(usuario);
+            if (!UsuarioValidacion.validarUsuario(usuario)) {
+                JOptionPane.showMessageDialog(panelUsuario, "Datos inválidos. Por favor revisa los campos.");
+                return;
+            }
+
+            usuarioDAO.guardar(usuario);
             JOptionPane.showMessageDialog(panelUsuario, "Usuario agregado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelUsuario, "Error al agregar usuario: " + ex.getMessage());
@@ -56,7 +55,7 @@ public class UsuarioControlador {
 
     private void listarUsuarios() {
         try {
-            List<Usuario> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
+            List<Usuario> usuarios = usuarioDAO.obtenerTodos();
             panelUsuario.mostrarUsuarios(usuarios);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelUsuario, "Error al listar usuarios: " + ex.getMessage());
@@ -66,12 +65,10 @@ public class UsuarioControlador {
     private void eliminarUsuario() {
         try {
             int id = Integer.parseInt(panelUsuario.getCampoID().getText());
-            usuarioDAO.eliminarUsuario(id);
+            usuarioDAO.eliminar(id);
             JOptionPane.showMessageDialog(panelUsuario, "Usuario eliminado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelUsuario, "Error al eliminar usuario: " + ex.getMessage());
         }
     }
 }
-
-

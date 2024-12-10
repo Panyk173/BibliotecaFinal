@@ -1,9 +1,10 @@
 package Vista;
+
+import Modelo.dao.UsuarioDAO;
 import Modelo.dto.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.Optional;
 
 public class LoginDialogo extends JDialog {
@@ -13,31 +14,34 @@ public class LoginDialogo extends JDialog {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+    private JTextField campoDNI;
+    private JPasswordField campoPassword;
+
     public LoginDialogo() {
         configurarVentana();
-        JPanel panel = configurarPanelPrincipal();
-        agregarCamposUsuarioYContrasena(panel);
-        agregarBotones(panel);
-        agregarPanelAlDialogo(panel);
+        JPanel panelPrincipal = configurarPanelPrincipal();
+        agregarCamposUsuarioYContrasena(panelPrincipal);
+        agregarBotones(panelPrincipal);
+        agregarPanelAlDialogo(panelPrincipal);
     }
 
-    // Configura las propiedades principales del cuadro de dialogo
     private void configurarVentana() {
         setTitle("Inicio de Sesión - Biblioteca");
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(400, 200);
+        setLocationRelativeTo(null);
     }
 
-    // Crea el panel principal con el formulario de login
+    private void agregarPanelAlDialogo(JPanel panel) {
+        add(panel); // Agrega el panel principal al contenido del JDialog
+    }
+
     private JPanel configurarPanelPrincipal() {
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return panel;
     }
-
-    // Agrega campos de texto para el DNI y la contraseña
-    private JTextField campoDNI;
-    private JPasswordField campoPassword;
 
     private void agregarCamposUsuarioYContrasena(JPanel panel) {
         panel.add(new JLabel("DNI:"));
@@ -49,19 +53,17 @@ public class LoginDialogo extends JDialog {
         panel.add(campoPassword);
     }
 
-    // Agrega botones de login y cancelar
     private void agregarBotones(JPanel panel) {
-        JButton loginButton = new JButton("Iniciar Sesión");
-        loginButton.addActionListener(this::manejarLogin);
-        panel.add(loginButton);
+        JButton botonLogin = new JButton("Iniciar Sesión");
+        botonLogin.addActionListener(e -> manejarLogin());
+        panel.add(botonLogin);
 
-        JButton cancelButton = new JButton("Cancelar");
-        cancelButton.addActionListener(e -> dispose());
-        panel.add(cancelButton);
+        JButton botonCancelar = new JButton("Cancelar");
+        botonCancelar.addActionListener(e -> dispose());
+        panel.add(botonCancelar);
     }
 
-    // Maneja el proceso de autenticación
-    private void manejarLogin(ActionEvent e) {
+    private void manejarLogin() {
         String dni = campoDNI.getText().trim();
         String password = new String(campoPassword.getPassword()).trim();
 
@@ -70,32 +72,28 @@ public class LoginDialogo extends JDialog {
             return;
         }
 
-        Optional<Usuario> usuarioOpt = usuarioDAO.obtenerTodosLosUsuarios().stream()
-                .filter(usuario -> usuario.getDni().equals(dni) && usuario.getPassword().equals(password))
-                .findFirst();
+        try {
+            Optional<Usuario> usuarioOpt = usuarioDAO.obtenerTodos()
+                    .stream()
+                    .filter(usuario -> usuario.getDni().equals(dni) && usuario.getPassword().equals(password))
+                    .findFirst();
 
-        if (usuarioOpt.isPresent()) {
-            usuarioAutenticado = usuarioOpt.get();
-            autenticado = true;
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", JOptionPane.ERROR_MESSAGE);
+            if (usuarioOpt.isPresent()) {
+                usuarioAutenticado = usuarioOpt.get();
+                autenticado = true;
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al intentar autenticar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Agrega el panel principal al cuadro de dialogo
-    private void agregarPanelAlDialogo(JPanel panel) {
-        add(panel);
-        pack();
-        setLocationRelativeTo(null);
-    }
-
-    // Devuelve si el usuario está autenticado
     public boolean isAutenticado() {
         return autenticado;
     }
 
-    // Devuelve el usuario autenticado
     public Usuario getUsuarioAutenticado() {
         return usuarioAutenticado;
     }

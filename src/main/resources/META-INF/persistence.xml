@@ -2,7 +2,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
-    <persistence-unit name="BibliotecaPU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="Biblioteca" transaction-type="RESOURCE_LOCAL">
         <!-- Clases gestionadas por JPA -->
         <class>Modelo.dto.Usuario</class>
         <class>Modelo.dto.Libro</class>

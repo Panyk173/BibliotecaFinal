@@ -1,10 +1,10 @@
 package Vista;
 
-import modelo.dto.Usuario;
-import vista.paneles.PanelUsuario;
-import vista.paneles.PanelLibro;
-import vista.paneles.PanelEjemplar;
-import vista.paneles.PanelPrestamo;
+import Modelo.dto.Usuario;
+import Vista.paneles.PanelUsuario;
+import Vista.paneles.PanelLibro;
+import Vista.paneles.PanelEjemplar;
+import Vista.paneles.PanelPrestamo;
 import Controlador.UsuarioControlador;
 import Controlador.LibroControlador;
 import Controlador.EjemplarControlador;

@@ -1,13 +1,13 @@
 package Controlador;
 
-import modelo.dao.EjemplarDAO;
-import modelo.dao.PrestamoDAO;
-import modelo.dao.UsuarioDAO;
-import modelo.dto.Ejemplar;
-import modelo.dto.Prestamo;
-import modelo.dto.Usuario;
-import modelo.validacion.PrestamoValidacion;
-import vista.paneles.PanelPrestamo;
+import Modelo.dao.EjemplarDAO;
+import Modelo.dao.PrestamoDAO;
+import Modelo.dao.UsuarioDAO;
+import Modelo.dto.Prestamo;
+import Modelo.dto.Usuario;
+import Modelo.dto.Ejemplar;
+import Modelo.validacion.PrestamoValidacion;
+import Vista.paneles.PanelPrestamo;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -40,20 +40,11 @@ public class PrestamoControlador {
             int usuarioId = Integer.parseInt(panelPrestamo.getCampoUsuarioID().getText());
             int ejemplarId = Integer.parseInt(panelPrestamo.getCampoEjemplarID().getText());
 
-            Usuario usuario = usuarioDAO.buscarUsuarioPorId(usuarioId);
-            if (usuario == null) {
-                JOptionPane.showMessageDialog(panelPrestamo, "Usuario no encontrado.");
-                return;
-            }
+            Usuario usuario = usuarioDAO.buscarPorId(usuarioId);
+            Ejemplar ejemplar = ejemplarDAO.buscarPorId(ejemplarId);
 
-            Ejemplar ejemplar = ejemplarDAO.buscarEjemplarPorId(ejemplarId);
-            if (ejemplar == null || !ejemplar.getEstado().equals("Disponible")) {
-                JOptionPane.showMessageDialog(panelPrestamo, "Ejemplar no encontrado o no disponible.");
-                return;
-            }
-
-            if (prestamoDAO.obtenerPrestamosActivos(usuarioId).size() >= 3) {
-                JOptionPane.showMessageDialog(panelPrestamo, "El usuario ya tiene 3 préstamos activos.");
+            if (usuario == null || ejemplar == null || !ejemplar.getEstado().equalsIgnoreCase("Disponible")) {
+                JOptionPane.showMessageDialog(panelPrestamo, "Datos inválidos o ejemplar no disponible.");
                 return;
             }
 
@@ -62,11 +53,14 @@ public class PrestamoControlador {
             prestamo.setEjemplar(ejemplar);
             prestamo.setFechaInicio(LocalDate.now());
 
-            prestamoDAO.guardarPrestamo(prestamo);
+            if (!PrestamoValidacion.validarPrestamo(prestamo)) {
+                JOptionPane.showMessageDialog(panelPrestamo, "Préstamo inválido.");
+                return;
+            }
 
+            prestamoDAO.guardar(prestamo);
             ejemplar.setEstado("Prestado");
-            ejemplarDAO.actualizarEjemplar(ejemplar);
-
+            ejemplarDAO.actualizar(ejemplar);
             JOptionPane.showMessageDialog(panelPrestamo, "Préstamo registrado con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelPrestamo, "Error al registrar préstamo: " + ex.getMessage());
@@ -75,7 +69,7 @@ public class PrestamoControlador {
 
     private void listarPrestamos() {
         try {
-            List<Prestamo> prestamos = prestamoDAO.obtenerTodosLosPrestamos();
+            List<Prestamo> prestamos = prestamoDAO.obtenerTodos();
             panelPrestamo.mostrarPrestamos(prestamos);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelPrestamo, "Error al listar préstamos: " + ex.getMessage());
@@ -86,19 +80,18 @@ public class PrestamoControlador {
         try {
             int prestamoId = Integer.parseInt(panelPrestamo.getCampoPrestamoID().getText());
 
-            Prestamo prestamo = prestamoDAO.buscarPrestamoPorId(prestamoId);
-            if (prestamo == null) {
-                JOptionPane.showMessageDialog(panelPrestamo, "Préstamo no encontrado.");
+            Prestamo prestamo = prestamoDAO.buscarPorId(prestamoId);
+            if (prestamo == null || prestamo.getFechaDevolucion() != null) {
+                JOptionPane.showMessageDialog(panelPrestamo, "Préstamo no válido.");
                 return;
             }
 
             prestamo.setFechaDevolucion(LocalDate.now());
-            prestamoDAO.actualizarPrestamo(prestamo);
+            prestamoDAO.actualizar(prestamo);
 
             Ejemplar ejemplar = prestamo.getEjemplar();
             ejemplar.setEstado("Disponible");
-            ejemplarDAO.actualizarEjemplar(ejemplar);
-
+            ejemplarDAO.actualizar(ejemplar);
             JOptionPane.showMessageDialog(panelPrestamo, "Devolución registrada con éxito.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelPrestamo, "Error al registrar devolución: " + ex.getMessage());
