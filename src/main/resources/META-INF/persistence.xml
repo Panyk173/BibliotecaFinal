@@ -24,7 +24,7 @@
             <!-- Mostrar las consultas SQL en la consola -->
             <property name="hibernate.show_sql" value="true" />
             <!-- Crear o actualizar las tablas automáticamente -->
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.hbm2ddl.auto" value="none" />
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,7 +1,7 @@
+// Clase PanelUsuario actualizada para integrar mejor los mensajes
 package Vista.paneles;
 
 import Modelo.dto.Usuario;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -24,38 +24,42 @@ public class PanelUsuario extends JPanel {
     public PanelUsuario() {
         setLayout(new BorderLayout());
 
-        // Panel de formulario
-        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 5, 5));
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Usuario"));
-        panelFormulario.add(new JLabel("ID:"));
-        panelFormulario.add(campoID);
-        panelFormulario.add(new JLabel("DNI:"));
-        panelFormulario.add(campoDNI);
-        panelFormulario.add(new JLabel("Nombre:"));
-        panelFormulario.add(campoNombre);
-        panelFormulario.add(new JLabel("Email:"));
-        panelFormulario.add(campoEmail);
-        panelFormulario.add(new JLabel("Password:"));
-        panelFormulario.add(campoPassword);
-        panelFormulario.add(new JLabel("Tipo:"));
-        panelFormulario.add(campoTipo);
+        JPanel formulario = new JPanel(new GridLayout(6, 2, 5, 5));
+        formulario.add(new JLabel("ID:"));
+        formulario.add(campoID);
+        formulario.add(new JLabel("DNI:"));
+        formulario.add(campoDNI);
+        formulario.add(new JLabel("Nombre:"));
+        formulario.add(campoNombre);
+        formulario.add(new JLabel("Email:"));
+        formulario.add(campoEmail);
+        formulario.add(new JLabel("Password:"));
+        formulario.add(campoPassword);
+        formulario.add(new JLabel("Tipo:"));
+        formulario.add(campoTipo);
 
-        // Panel de botones
-        JPanel panelBotones = new JPanel();
-        panelBotones.add(botonAgregar);
-        panelBotones.add(botonListar);
-        panelBotones.add(botonEliminar);
+        JPanel botones = new JPanel(new FlowLayout());
+        botones.add(botonAgregar);
+        botones.add(botonListar);
+        botones.add(botonEliminar);
 
-        // Area de resultado
-        areaResultado.setEditable(false);
-        JScrollPane scrollResultado = new JScrollPane(areaResultado);
-
-        add(panelFormulario, BorderLayout.NORTH);
-        add(panelBotones, BorderLayout.CENTER);
-        add(scrollResultado, BorderLayout.SOUTH);
+        add(formulario, BorderLayout.NORTH);
+        add(botones, BorderLayout.CENTER);
+        add(new JScrollPane(areaResultado), BorderLayout.SOUTH);
     }
 
-    // Métodos para acceder a los componentes
+    public JButton getBotonAgregar() {
+        return botonAgregar;
+    }
+
+    public JButton getBotonListar() {
+        return botonListar;
+    }
+
+    public JButton getBotonEliminar() {
+        return botonEliminar;
+    }
+
     public JTextField getCampoID() {
         return campoID;
     }
@@ -80,26 +84,18 @@ public class PanelUsuario extends JPanel {
         return campoTipo;
     }
 
-    public JButton getBotonAgregar() {
-        return botonAgregar;
-    }
-
-    public JButton getBotonListar() {
-        return botonListar;
-    }
-
-    public JButton getBotonEliminar() {
-        return botonEliminar;
-    }
-
     public void mostrarUsuarios(List<Usuario> usuarios) {
         areaResultado.setText("");
-        usuarios.forEach(usuario -> areaResultado.append(
-                "ID: " + usuario.getId() + "\n" +
-                        "DNI: " + usuario.getDni() + "\n" +
-                        "Nombre: " + usuario.getNombre() + "\n" +
-                        "Email: " + usuario.getEmail() + "\n" +
-                        "Tipo: " + usuario.getTipo() + "\n\n"
-        ));
+        if (usuarios == null || usuarios.isEmpty()) {
+            areaResultado.append("No hay usuarios para mostrar.\n");
+            return;
+        }
+        for (Usuario usuario : usuarios) {
+            areaResultado.append(usuario.toString() + "\n");
+        }
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        areaResultado.setText(mensaje);
     }
 }

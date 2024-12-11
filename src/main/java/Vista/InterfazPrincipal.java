@@ -12,10 +12,12 @@ import Controlador.PrestamoControlador;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class InterfazPrincipal extends JFrame {
 
     private final Usuario usuarioAutenticado;
+    private JPanel contenedorPaneles;
 
     // Constructor principal
     public InterfazPrincipal(Usuario usuarioAutenticado) {
@@ -32,7 +34,7 @@ public class InterfazPrincipal extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Inicializa los componentes de la ventana
+    // Inicializa los componentes de la interfaz
     private void inicializarComponentes() {
         JPanel panelPrincipal = new JPanel(new BorderLayout());
 
@@ -40,7 +42,7 @@ public class InterfazPrincipal extends JFrame {
         JPanel menuLateral = crearMenuLateral();
 
         // Crear el contenedor para los paneles
-        JPanel contenedorPaneles = new JPanel(new CardLayout());
+        contenedorPaneles = new JPanel(new CardLayout());
 
         // Instanciar los paneles y sus controladores
         PanelUsuario panelUsuario = new PanelUsuario();
@@ -68,63 +70,53 @@ public class InterfazPrincipal extends JFrame {
             ocultarOpcionesParaUsuariosNormales(menuLateral);
         }
 
-        // Configurar acción de los botones del menú
-        configurarAccionesMenu(menuLateral, contenedorPaneles);
-
         // Agregar el panel principal a la ventana
         add(panelPrincipal);
     }
 
-    // Crea el menú lateral
+    // Crea el menú lateral con botones
     private JPanel crearMenuLateral() {
         JPanel menu = new JPanel(new GridLayout(5, 1, 10, 10));
         menu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        menu.add(crearBotonMenu("Usuarios"));
-        menu.add(crearBotonMenu("Libros"));
-        menu.add(crearBotonMenu("Ejemplares"));
-        menu.add(crearBotonMenu("Préstamos"));
-        menu.add(crearBotonMenu("Salir"));
+        // Crear y añadir los botones con sus listeners
+        menu.add(crearBotonMenu("Usuarios", e -> cambiarPanel("Usuarios")));
+        menu.add(crearBotonMenu("Libros", e -> cambiarPanel("Libros")));
+        menu.add(crearBotonMenu("Ejemplares", e -> cambiarPanel("Ejemplares")));
+        menu.add(crearBotonMenu("Préstamos", e -> cambiarPanel("Préstamos")));
+        menu.add(crearBotonMenu("Salir", e -> salirAplicacion()));
 
         return menu;
     }
 
-    // Crea botones para el menú lateral
-    private JButton crearBotonMenu(String texto) {
+    // Crea un botón del menú con su ActionListener
+    private JButton crearBotonMenu(String texto, ActionListener listener) {
         JButton boton = new JButton(texto);
         boton.setActionCommand(texto);
+        boton.addActionListener(listener); // Asignar el listener
         return boton;
     }
 
-    // Configura las acciones de los botones del menú
-    private void configurarAccionesMenu(JPanel menuLateral, JPanel contenedorPaneles) {
-        CardLayout cardLayout = (CardLayout) contenedorPaneles.getLayout();
+    // Cambia al panel seleccionado
+    private void cambiarPanel(String nombrePanel) {
+        CardLayout layout = (CardLayout) contenedorPaneles.getLayout();
+        layout.show(contenedorPaneles, nombrePanel);
+    }
 
-        for (Component componente : menuLateral.getComponents()) {
-            if (componente instanceof JButton boton) {
-                boton.addActionListener(e -> {
-                    String actionCommand = e.getActionCommand();
-                    if ("Salir".equals(actionCommand)) {
-                        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Deseas salir?", "Confirmación", JOptionPane.YES_NO_OPTION);
-                        if (confirmacion == JOptionPane.YES_OPTION) {
-                            System.exit(0);
-                        }
-                    } else {
-                        cardLayout.show(contenedorPaneles, actionCommand);
-                    }
-                });
-            }
+    // Oculta opciones para usuarios normales
+    private void ocultarOpcionesParaUsuariosNormales(JPanel menuLateral) {
+        Component[] componentes = menuLateral.getComponents();
+        // Ejemplo: deshabilitar botones innecesarios
+        if (componentes.length > 1) {
+            componentes[0].setEnabled(false); // Deshabilitar "Usuarios"
         }
     }
 
-    // Oculta las opciones no permitidas para usuarios normales
-    private void ocultarOpcionesParaUsuariosNormales(JPanel menuLateral) {
-        for (Component componente : menuLateral.getComponents()) {
-            if (componente instanceof JButton boton) {
-                if (boton.getActionCommand().equalsIgnoreCase("Usuarios") || boton.getActionCommand().equalsIgnoreCase("Ejemplares")) {
-                    boton.setVisible(false);
-                }
-            }
+    // Sale de la aplicación
+    private void salirAplicacion() {
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas salir?", "Confirmar salida", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 }

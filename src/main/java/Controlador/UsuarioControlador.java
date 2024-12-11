@@ -1,6 +1,7 @@
+// Clase UsuarioControlador actualizada para manejar el JTextArea
 package Controlador;
 
-import Modelo.dao.UsuarioDAO;
+import Modelo.dao.GenericoDAO;
 import Modelo.dto.Usuario;
 import Modelo.validacion.UsuarioValidacion;
 import Vista.paneles.PanelUsuario;
@@ -10,11 +11,11 @@ import java.util.List;
 
 public class UsuarioControlador {
 
-    private final UsuarioDAO usuarioDAO;
+    private final GenericoDAO<Usuario> usuarioDAO;
     private final PanelUsuario panelUsuario;
 
     public UsuarioControlador(PanelUsuario panelUsuario) {
-        this.usuarioDAO = new UsuarioDAO();
+        this.usuarioDAO = new GenericoDAO<>(Usuario.class);
         this.panelUsuario = panelUsuario;
 
         inicializarEventos();
@@ -42,33 +43,44 @@ public class UsuarioControlador {
             usuario.setTipo(tipo);
 
             if (!UsuarioValidacion.validarUsuario(usuario)) {
-                JOptionPane.showMessageDialog(panelUsuario, "Datos inválidos. Por favor revisa los campos.");
+                panelUsuario.mostrarMensaje("Datos inválidos. Por favor revisa los campos.");
                 return;
             }
 
             usuarioDAO.guardar(usuario);
-            JOptionPane.showMessageDialog(panelUsuario, "Usuario agregado con éxito.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(panelUsuario, "Error al agregar usuario: " + ex.getMessage());
+            panelUsuario.mostrarMensaje("Usuario agregado con éxito.");
+        } catch (Exception e) {
+            panelUsuario.mostrarMensaje("Error al agregar usuario: " + e.getMessage());
         }
     }
 
     private void listarUsuarios() {
         try {
             List<Usuario> usuarios = usuarioDAO.obtenerTodos();
-            panelUsuario.mostrarUsuarios(usuarios);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(panelUsuario, "Error al listar usuarios: " + ex.getMessage());
+            if (usuarios.isEmpty()) {
+                panelUsuario.mostrarMensaje("No hay usuarios para mostrar.");
+            } else {
+                panelUsuario.mostrarUsuarios(usuarios);
+            }
+        } catch (Exception e) {
+            panelUsuario.mostrarMensaje("Error al listar usuarios: " + e.getMessage());
         }
     }
 
     private void eliminarUsuario() {
         try {
             int id = Integer.parseInt(panelUsuario.getCampoID().getText());
+            Usuario usuario = usuarioDAO.buscarPorId(id);
+            if (usuario == null) {
+                panelUsuario.mostrarMensaje("Usuario no encontrado.");
+                return;
+            }
             usuarioDAO.eliminar(id);
-            JOptionPane.showMessageDialog(panelUsuario, "Usuario eliminado con éxito.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(panelUsuario, "Error al eliminar usuario: " + ex.getMessage());
+            panelUsuario.mostrarMensaje("Usuario eliminado con éxito.");
+        } catch (NumberFormatException e) {
+            panelUsuario.mostrarMensaje("El ID ingresado no es válido.");
+        } catch (Exception e) {
+            panelUsuario.mostrarMensaje("Error al eliminar usuario: " + e.getMessage());
         }
     }
 }
