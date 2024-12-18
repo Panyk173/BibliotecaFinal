@@ -10,7 +10,7 @@ public class EntityManagerFactoryConnector {
     private static EntityManagerFactory emf;
 
     public static EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null) {
+        if (emf == null || !emf.isOpen()) {
             emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         }
         return emf;

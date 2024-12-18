@@ -1,68 +1,64 @@
 package Modelo.dao;
 
-import Modelo.dao.EntityManagerFactoryConnector;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
 public class GenericoDAO<T> {
     private final Class<T> entityClass;
 
-    public GenericoDAO(Class<T> entityClass) {
+    public GenericoDAO(final Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
-    public void guardar(T entidad) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public void guardar(final T entidad) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(entidad);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Error al guardar la entidad: " + e.getMessage());
-            throw e;
+            throw new RuntimeException("Error al guardar la entidad " + entityClass.getSimpleName(), e);
         } finally {
             em.close();
         }
     }
 
-    public void actualizar(T entidad) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public void actualizar(final T entidad) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(entidad);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Error al actualizar la entidad: " + e.getMessage());
-            throw e;
+            throw new RuntimeException("Error al actualizar la entidad " + entityClass.getSimpleName(), e);
         } finally {
             em.close();
         }
     }
 
-    public void eliminar(Object id) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public void eliminar(final Object id) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             em.getTransaction().begin();
-            T entidad = em.find(entityClass, id);
+            final T entidad = em.find(entityClass, id);
             if (entidad == null) {
-                System.err.println("Entidad con ID " + id + " no encontrada para eliminar.");
-                return;
+                em.getTransaction().rollback();
+                throw new IllegalArgumentException("Entidad con ID " + id + " no encontrada.");
             }
             em.remove(entidad);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Error al eliminar la entidad: " + e.getMessage());
-            throw e;
+            throw new RuntimeException("Error al eliminar la entidad " + entityClass.getSimpleName(), e);
         } finally {
             em.close();
         }
     }
 
-    public T buscarPorId(Object id) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public T buscarPorId(final Object id) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             return em.find(entityClass, id);
         } finally {
@@ -71,14 +67,10 @@ public class GenericoDAO<T> {
     }
 
     public List<T> obtenerTodos() {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
-            System.out.println("Ejecutando consulta: SELECT e FROM " + entityClass.getSimpleName() + " e");
-            List<T> resultados = em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass).getResultList();
-            if (resultados.isEmpty()) {
-                System.out.println("No se encontraron resultados para " + entityClass.getSimpleName());
-            }
-            return resultados;
+            return em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass)
+                    .getResultList();
         } finally {
             em.close();
         }

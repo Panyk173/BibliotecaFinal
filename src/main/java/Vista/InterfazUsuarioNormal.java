@@ -12,7 +12,6 @@ public class InterfazUsuarioNormal extends JFrame {
 
     private final Usuario usuario;
     private final PrestamoDAO prestamoDAO;
-
     private JTable tablaPrestamos;
 
     public InterfazUsuarioNormal(Usuario usuario) {

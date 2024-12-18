@@ -21,7 +21,6 @@ public class PanelPrestamo extends JPanel {
     public PanelPrestamo() {
         setLayout(new BorderLayout());
 
-        // Panel de formulario
         JPanel panelFormulario = new JPanel(new GridLayout(3, 2, 5, 5));
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Préstamo"));
         panelFormulario.add(new JLabel("Usuario ID:"));
@@ -31,13 +30,11 @@ public class PanelPrestamo extends JPanel {
         panelFormulario.add(new JLabel("Préstamo ID:"));
         panelFormulario.add(campoPrestamoID);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel();
         panelBotones.add(botonRegistrar);
         panelBotones.add(botonListar);
         panelBotones.add(botonDevolucion);
 
-        // Área de resultado
         areaResultado.setEditable(false);
         JScrollPane scrollResultado = new JScrollPane(areaResultado);
 
@@ -46,30 +43,13 @@ public class PanelPrestamo extends JPanel {
         add(scrollResultado, BorderLayout.SOUTH);
     }
 
-    // Métodos para acceder a los componentes
-    public JTextField getCampoUsuarioID() {
-        return campoUsuarioID;
-    }
+    public JTextField getCampoUsuarioID() { return campoUsuarioID; }
+    public JTextField getCampoEjemplarID() { return campoEjemplarID; }
+    public JTextField getCampoPrestamoID() { return campoPrestamoID; }
 
-    public JTextField getCampoEjemplarID() {
-        return campoEjemplarID;
-    }
-
-    public JTextField getCampoPrestamoID() {
-        return campoPrestamoID;
-    }
-
-    public JButton getBotonRegistrar() {
-        return botonRegistrar;
-    }
-
-    public JButton getBotonListar() {
-        return botonListar;
-    }
-
-    public JButton getBotonDevolucion() {
-        return botonDevolucion;
-    }
+    public JButton getBotonRegistrar() { return botonRegistrar; }
+    public JButton getBotonListar() { return botonListar; }
+    public JButton getBotonDevolucion() { return botonDevolucion; }
 
     public void mostrarPrestamos(List<Prestamo> prestamos) {
         areaResultado.setText("");

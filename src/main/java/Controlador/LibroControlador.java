@@ -13,10 +13,9 @@ public class LibroControlador {
     private final LibroDAO libroDAO;
     private final PanelLibro panelLibro;
 
-    public LibroControlador(PanelLibro panelLibro) {
+    public LibroControlador(final PanelLibro panelLibro) {
         this.libroDAO = new LibroDAO();
         this.panelLibro = panelLibro;
-
         inicializarEventos();
     }
 
@@ -28,11 +27,11 @@ public class LibroControlador {
 
     private void agregarLibro() {
         try {
-            String isbn = panelLibro.getCampoISBN().getText();
-            String titulo = panelLibro.getCampoTitulo().getText();
-            String autor = panelLibro.getCampoAutor().getText();
+            final String isbn = panelLibro.getCampoISBN().getText().trim();
+            final String titulo = panelLibro.getCampoTitulo().getText().trim();
+            final String autor = panelLibro.getCampoAutor().getText().trim();
 
-            Libro libro = new Libro();
+            final Libro libro = new Libro();
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
             libro.setAutor(autor);
@@ -51,7 +50,7 @@ public class LibroControlador {
 
     private void listarLibros() {
         try {
-            List<Libro> libros = libroDAO.obtenerTodos();
+            final List<Libro> libros = libroDAO.obtenerTodos();
             panelLibro.mostrarLibros(libros);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLibro, "Error al listar libros: " + ex.getMessage());
@@ -60,7 +59,7 @@ public class LibroControlador {
 
     private void eliminarLibro() {
         try {
-            String isbn = panelLibro.getCampoISBN().getText();
+            final String isbn = panelLibro.getCampoISBN().getText().trim();
             libroDAO.eliminar(isbn);
             JOptionPane.showMessageDialog(panelLibro, "Libro eliminado con éxito.");
         } catch (Exception ex) {

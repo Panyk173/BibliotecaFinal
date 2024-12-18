@@ -37,30 +37,27 @@ public class InterfazUsuarioAdmin extends JFrame {
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         JTabbedPane pestanas = new JTabbedPane();
 
-        // Crear instancias de los paneles
         PanelUsuario panelUsuario = new PanelUsuario();
         PanelLibro panelLibro = new PanelLibro();
         PanelEjemplar panelEjemplar = new PanelEjemplar();
         PanelPrestamo panelPrestamo = new PanelPrestamo();
 
-        // Asociar controladores a los paneles
-        new UsuarioControlador(panelUsuario); // Vincula el controlador de usuarios
-        // Asociar controladores de libro, ejemplar y préstamo si están implementados
+        new UsuarioControlador(panelUsuario);
         new LibroControlador(panelLibro);
         new EjemplarControlador(panelEjemplar);
         new PrestamoControlador(panelPrestamo);
 
-        // Agregar los paneles al TabbedPane
         pestanas.addTab("Gestión de Usuarios", panelUsuario);
         pestanas.addTab("Gestión de Libros", panelLibro);
         pestanas.addTab("Gestión de Ejemplares", panelEjemplar);
         pestanas.addTab("Gestión de Préstamos", panelPrestamo);
 
-        panelPrincipal.add(pestanas, BorderLayout.CENTER);
-        add(panelPrincipal);
-
         JLabel labelBienvenida = new JLabel("Bienvenido, Administrador: " + usuarioAutenticado.getNombre(), JLabel.CENTER);
         labelBienvenida.setFont(new Font("Arial", Font.BOLD, 16));
+
         panelPrincipal.add(labelBienvenida, BorderLayout.NORTH);
+        panelPrincipal.add(pestanas, BorderLayout.CENTER);
+
+        add(panelPrincipal);
     }
 }

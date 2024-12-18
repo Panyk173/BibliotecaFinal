@@ -10,8 +10,8 @@ public class PrestamoDAO extends GenericoDAO<Prestamo> {
         super(Prestamo.class);
     }
 
-    public List<Prestamo> obtenerPrestamosActivosPorUsuario(Integer usuarioId) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public List<Prestamo> obtenerPrestamosActivosPorUsuario(final Integer usuarioId) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             return em.createQuery("SELECT p FROM Prestamo p WHERE p.usuario.id = :usuarioId AND p.fechaDevolucion IS NULL", Prestamo.class)
                     .setParameter("usuarioId", usuarioId)
@@ -21,8 +21,8 @@ public class PrestamoDAO extends GenericoDAO<Prestamo> {
         }
     }
 
-    public List<Prestamo> obtenerPrestamosPorEjemplar(Integer ejemplarId) {
-        EntityManager em = EntityManagerFactoryConnector.getEntityManager();
+    public List<Prestamo> obtenerPrestamosPorEjemplar(final Integer ejemplarId) {
+        final EntityManager em = EntityManagerFactoryConnector.getEntityManager();
         try {
             return em.createQuery("SELECT p FROM Prestamo p WHERE p.ejemplar.id = :ejemplarId", Prestamo.class)
                     .setParameter("ejemplarId", ejemplarId)

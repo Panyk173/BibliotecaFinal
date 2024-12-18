@@ -1,4 +1,3 @@
-// Clase UsuarioControlador actualizada para manejar el JTextArea
 package Controlador;
 
 import Modelo.dao.GenericoDAO;
@@ -14,10 +13,9 @@ public class UsuarioControlador {
     private final GenericoDAO<Usuario> usuarioDAO;
     private final PanelUsuario panelUsuario;
 
-    public UsuarioControlador(PanelUsuario panelUsuario) {
+    public UsuarioControlador(final PanelUsuario panelUsuario) {
         this.usuarioDAO = new GenericoDAO<>(Usuario.class);
         this.panelUsuario = panelUsuario;
-
         inicializarEventos();
     }
 
@@ -29,13 +27,13 @@ public class UsuarioControlador {
 
     private void agregarUsuario() {
         try {
-            String dni = panelUsuario.getCampoDNI().getText();
-            String nombre = panelUsuario.getCampoNombre().getText();
-            String email = panelUsuario.getCampoEmail().getText();
-            String password = panelUsuario.getCampoPassword().getText();
-            String tipo = panelUsuario.getCampoTipo().getText();
+            final String dni = panelUsuario.getCampoDNI().getText().trim();
+            final String nombre = panelUsuario.getCampoNombre().getText().trim();
+            final String email = panelUsuario.getCampoEmail().getText().trim();
+            final String password = panelUsuario.getCampoPassword().getText().trim();
+            final String tipo = panelUsuario.getCampoTipo().getText().trim();
 
-            Usuario usuario = new Usuario();
+            final Usuario usuario = new Usuario();
             usuario.setDni(dni);
             usuario.setNombre(nombre);
             usuario.setEmail(email);
@@ -56,7 +54,7 @@ public class UsuarioControlador {
 
     private void listarUsuarios() {
         try {
-            List<Usuario> usuarios = usuarioDAO.obtenerTodos();
+            final List<Usuario> usuarios = usuarioDAO.obtenerTodos();
             if (usuarios.isEmpty()) {
                 panelUsuario.mostrarMensaje("No hay usuarios para mostrar.");
             } else {
@@ -69,8 +67,8 @@ public class UsuarioControlador {
 
     private void eliminarUsuario() {
         try {
-            int id = Integer.parseInt(panelUsuario.getCampoID().getText());
-            Usuario usuario = usuarioDAO.buscarPorId(id);
+            final int id = Integer.parseInt(panelUsuario.getCampoID().getText().trim());
+            final Usuario usuario = usuarioDAO.buscarPorId(id);
             if (usuario == null) {
                 panelUsuario.mostrarMensaje("Usuario no encontrado.");
                 return;

@@ -21,7 +21,6 @@ public class PanelEjemplar extends JPanel {
     public PanelEjemplar() {
         setLayout(new BorderLayout());
 
-        // Panel de formulario
         JPanel panelFormulario = new JPanel(new GridLayout(3, 2, 5, 5));
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Ejemplar"));
         panelFormulario.add(new JLabel("ID:"));
@@ -31,13 +30,11 @@ public class PanelEjemplar extends JPanel {
         panelFormulario.add(new JLabel("Estado:"));
         panelFormulario.add(campoEstado);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel();
         panelBotones.add(botonAgregar);
         panelBotones.add(botonListar);
         panelBotones.add(botonEliminar);
 
-        // Área de resultado
         areaResultado.setEditable(false);
         JScrollPane scrollResultado = new JScrollPane(areaResultado);
 
@@ -46,7 +43,6 @@ public class PanelEjemplar extends JPanel {
         add(scrollResultado, BorderLayout.SOUTH);
     }
 
-    // Métodos para acceder a los componentes
     public JTextField getCampoID() {
         return campoID;
     }

@@ -34,7 +34,7 @@ public class LoginDialogo extends JDialog {
     }
 
     private void agregarPanelAlDialogo(JPanel panel) {
-        add(panel); // Agrega el panel principal al contenido del JDialog
+        add(panel);
     }
 
     private JPanel configurarPanelPrincipal() {

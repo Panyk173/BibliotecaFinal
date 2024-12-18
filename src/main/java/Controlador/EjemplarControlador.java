@@ -16,11 +16,10 @@ public class EjemplarControlador {
     private final LibroDAO libroDAO;
     private final PanelEjemplar panelEjemplar;
 
-    public EjemplarControlador(PanelEjemplar panelEjemplar) {
+    public EjemplarControlador(final PanelEjemplar panelEjemplar) {
         this.ejemplarDAO = new EjemplarDAO();
         this.libroDAO = new LibroDAO();
         this.panelEjemplar = panelEjemplar;
-
         inicializarEventos();
     }
 
@@ -32,28 +31,30 @@ public class EjemplarControlador {
 
     private void agregarEjemplar() {
         try {
-            int id = Integer.parseInt(panelEjemplar.getCampoID().getText());
-            String isbn = panelEjemplar.getCampoISBN().getText();
-            String estado = panelEjemplar.getCampoEstado().getText();
+            final int id = Integer.parseInt(panelEjemplar.getCampoID().getText().trim());
+            final String isbn = panelEjemplar.getCampoISBN().getText().trim();
+            final String estado = panelEjemplar.getCampoEstado().getText().trim();
 
-            Libro libro = libroDAO.buscarPorId(isbn);
+            final Libro libro = libroDAO.buscarPorId(isbn);
             if (libro == null) {
                 JOptionPane.showMessageDialog(panelEjemplar, "El libro con ISBN " + isbn + " no existe.");
                 return;
             }
 
-            Ejemplar ejemplar = new Ejemplar();
+            final Ejemplar ejemplar = new Ejemplar();
             ejemplar.setId(id);
             ejemplar.setIsbn(libro);
             ejemplar.setEstado(estado);
 
             if (!EjemplarValidacion.validarEjemplar(ejemplar)) {
-                JOptionPane.showMessageDialog(panelEjemplar, "Datos inválidos. Por favor revisa los campos.");
+                JOptionPane.showMessageDialog(panelEjemplar, "Datos inválidos. Revisa los campos.");
                 return;
             }
 
             ejemplarDAO.guardar(ejemplar);
             JOptionPane.showMessageDialog(panelEjemplar, "Ejemplar agregado con éxito.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(panelEjemplar, "El ID debe ser un número válido.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al agregar ejemplar: " + ex.getMessage());
         }
@@ -61,7 +62,7 @@ public class EjemplarControlador {
 
     private void listarEjemplares() {
         try {
-            List<Ejemplar> ejemplares = ejemplarDAO.obtenerTodos();
+            final List<Ejemplar> ejemplares = ejemplarDAO.obtenerTodos();
             panelEjemplar.mostrarEjemplares(ejemplares);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al listar ejemplares: " + ex.getMessage());
@@ -70,9 +71,11 @@ public class EjemplarControlador {
 
     private void eliminarEjemplar() {
         try {
-            int id = Integer.parseInt(panelEjemplar.getCampoID().getText());
+            final int id = Integer.parseInt(panelEjemplar.getCampoID().getText().trim());
             ejemplarDAO.eliminar(id);
             JOptionPane.showMessageDialog(panelEjemplar, "Ejemplar eliminado con éxito.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(panelEjemplar, "El ID debe ser un número válido.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelEjemplar, "Error al eliminar ejemplar: " + ex.getMessage());
         }

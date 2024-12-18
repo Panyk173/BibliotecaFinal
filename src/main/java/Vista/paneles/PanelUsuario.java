@@ -1,4 +1,3 @@
-// Clase PanelUsuario actualizada para integrar mejor los mensajes
 package Vista.paneles;
 
 import Modelo.dto.Usuario;
@@ -43,46 +42,22 @@ public class PanelUsuario extends JPanel {
         botones.add(botonListar);
         botones.add(botonEliminar);
 
+        areaResultado.setEditable(false);
         add(formulario, BorderLayout.NORTH);
         add(botones, BorderLayout.CENTER);
         add(new JScrollPane(areaResultado), BorderLayout.SOUTH);
     }
 
-    public JButton getBotonAgregar() {
-        return botonAgregar;
-    }
+    public JButton getBotonAgregar() { return botonAgregar; }
+    public JButton getBotonListar() { return botonListar; }
+    public JButton getBotonEliminar() { return botonEliminar; }
 
-    public JButton getBotonListar() {
-        return botonListar;
-    }
-
-    public JButton getBotonEliminar() {
-        return botonEliminar;
-    }
-
-    public JTextField getCampoID() {
-        return campoID;
-    }
-
-    public JTextField getCampoDNI() {
-        return campoDNI;
-    }
-
-    public JTextField getCampoNombre() {
-        return campoNombre;
-    }
-
-    public JTextField getCampoEmail() {
-        return campoEmail;
-    }
-
-    public JTextField getCampoPassword() {
-        return campoPassword;
-    }
-
-    public JTextField getCampoTipo() {
-        return campoTipo;
-    }
+    public JTextField getCampoID() { return campoID; }
+    public JTextField getCampoDNI() { return campoDNI; }
+    public JTextField getCampoNombre() { return campoNombre; }
+    public JTextField getCampoEmail() { return campoEmail; }
+    public JTextField getCampoPassword() { return campoPassword; }
+    public JTextField getCampoTipo() { return campoTipo; }
 
     public void mostrarUsuarios(List<Usuario> usuarios) {
         areaResultado.setText("");
